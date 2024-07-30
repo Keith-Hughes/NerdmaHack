@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Message</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='js/record.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">MediaRecorder</a></h1>
+        <p>Record and Send live audio</p>
+    </header>
+    <main>
+        <section>
+            <i id="recordButton" class="fa fa-microphone" style="font-size:36px; cursor: pointer;" onclick="startRecording()"></i>
+            <i id="stopButton" class="fa fa-stop" style="font-size:36px; cursor: pointer; display: none;" onclick="stopRecording()"></i>
+        </section>
+        <section>
+            <audio id="audio" controls></audio>
+        </section>
+    </main>
+</body>
+</html>
