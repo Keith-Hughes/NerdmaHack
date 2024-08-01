@@ -64,10 +64,10 @@ def generate_pdf(invoice):
     for item in invoice['items']:
         c.drawString(72, y_position, item['description'])
         c.drawString(300, y_position, str(item['quantity']))
-        c.drawString(400, y_position, f"<span class="math-inline">\{item\['unit\_price'\]\:\.2f\}"\)
-c\.drawString\(500, y\_position, f"</span>{item['total']:.2f}")
+        c.drawString(400, y_position, f"<span class=math-inline>{item['unit_price']:.2f}")
+        c.drawString(500, y_position, f"</span>{item['total']:.2f}")
         y_position -= 15
 
     # Draw totals
     c.drawString(400, y_position - 20, f"Subtotal: ${invoice['subtotal']:.2f}")
-    c.drawString(400, y_position - 35, f"Tax ({invoice['tax_rate']
+    c.drawString(400, y_position - 35, f"Tax ({invoice['tax_rate']})")
