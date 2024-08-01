@@ -1,6 +1,9 @@
 
 from flask import current_app
 import requests
+import smtplib, ssl
+from email.message import EmailMessage
+import json
 
 
 def send_whatsapp_message(origin_message, reply):
@@ -38,7 +41,7 @@ def send_whatsapp_voice_message(origin_message, file_path):
     upload_url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/media"
 
     files = {
-        'file': (file_path, open(file_path, 'rb'), 'audio/mp3')
+        'file': (file_path, open(file_path, 'rb'), 'audio/mpeg')
     }
 
     upload_json = {
@@ -58,7 +61,10 @@ def send_whatsapp_voice_message(origin_message, file_path):
             'type': "audio",
             'audio': {
                 'id': response.json()['id']
-            }
+            },
+            'context': {
+                'message_id': origin_message['id']
+        }
         }
 
         response = requests.post(url, headers=headers, json=json)
@@ -67,10 +73,35 @@ def send_whatsapp_voice_message(origin_message, file_path):
     except:
         return send_whatsapp_message(origin_message, "unable to process")
 
-def send_email_message(message, to_email):
+def send_email_message(subject, body, to_email):
+    context = ssl.create_default_context()
+    port = current_app.config.get('MAIL_PORT')
+    password = current_app.config.get('MAIL_PASSWORD')
+    user = current_app.config.get('MAIL_USERNAME')
+    server = current_app.config.get('MAIL_SERVER')
+    from_email = "solutions@stocktally.co.za"
 
-    return True
+    # Create the email message
+    print("Creating")
+    msg = EmailMessage()
+
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+    msg.set_content(body)
+    try:
+        with smtplib.SMTP_SSL(server, port, context=context) as server:
+            print('Sending message...')
+            login_response = server.login(user, password)
+            print(login_response)
+            result = server.send_message(msg)
+            response = {"success": True, "message": "Email sent successfully to "+ to_email}
+    except Exception as e:
+        response = {"success": False, "message": "Could not deliver the email", "error": str(e)}   
+
+    return json.dumps(response)
 
 def send_email_file(file_path, to_email):
 
     return True
+

@@ -237,6 +237,31 @@ class CreateTools(Enum):
             },
         }
     }
+    SEND_EMAIL = {
+        "type": "function",
+        "function": {
+            "name": "send_email",
+            "description": "send an email message to a recipient",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "email_address": {
+                        "type": "string",
+                        "description": "The recipients email address",
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "message to send the recipient",
+                    },
+                    "subject": {
+                        "type": "string",
+                        "description": "the subject of the email",
+                    },
+                },
+                "required": ["email_address", "message", "subject"],
+            },
+        }
+    }
 
 
 class DeleteTools(Enum):
@@ -291,6 +316,7 @@ OperationMap= {
     }
 
 all_functions= [
+    CreateTools.SEND_EMAIL.value,
     ReadTools.DETERMINE_CRUD.value,
     ReadTools.GET_CLIENT_INFO.value,
     ReadTools.GET_INVENTORY_REPORT.value,

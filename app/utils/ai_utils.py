@@ -6,10 +6,13 @@ import json
 from .ai_functions import *
 from .ai_roles import *
 from termcolor import colored
+from .communication import *
 
 _ai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 thread = _ai_client.beta.threads.create()
+
+ai_working = False
 
 my_assistant = _ai_client.beta.assistants.create(
         instructions=Roles.DETERMINE_CRUD.value,
@@ -32,11 +35,15 @@ def send_operation_outcome(run_id, thread_id, tool_call_id, outcome):
         ]
     )
 
+    time.sleep(3)  
+
 
 def determine_crud(message):
+    global ai_working
+
     try:
-        if not message:
-            return ""
+        if not message or ai_working:
+            return "AI working"
         print('determining crud operation...')
 
         user_message= _ai_client.beta.threads.messages.create(
@@ -49,22 +56,22 @@ def determine_crud(message):
             assistant_id=my_assistant.id,
         )
 
-        while True:
+        
+        ai_working = True
+
+        while ai_working:
             run_status = _ai_client.beta.threads.runs.retrieve(run.id, thread_id=thread.id)
-            print(colored('run', 'light_yellow'))
-            print(run_status)
+            print(colored('ai working...', 'light_yellow'))
             print()
 
             if run_status.status == 'completed':
                 all_messages=_ai_client.beta.threads.messages.list(thread_id=thread.id)
-                print(colored('All messages', 'green'))
-                print(all_messages)
                 ai_response = all_messages.data[0].content[0].text.value
-                print(ai_response)
+                print(colored(ai_response, 'green'))
+                ai_working = False
                 return ai_response
 
             elif run_status.status == 'requires_action':
-                print(run_status.required_action.submit_tool_outputs.tool_calls)
 
 
                 all_functions = run_status.required_action.submit_tool_outputs.tool_calls
@@ -75,6 +82,17 @@ def determine_crud(message):
                     tool_call_id = run_status.required_action.submit_tool_outputs.tool_calls[0].id
 
                     match function.function.name.upper():
+
+                        case "SEND_EMAIL":
+                            subject = function_arguments['subject']
+                            to_email = function_arguments['email_address']
+                            body = function_arguments['message']
+
+                            outcome=send_email_message(subject, body, to_email)
+                        
+                            send_operation_outcome(run.id, thread.id, tool_call_id, outcome)
+                            print(colored("EMAIL OUTCOME: "+outcome, 'blue'))
+                            break
 
                         case "GET_CLIENT_INFO":
 
@@ -116,25 +134,15 @@ def determine_crud(message):
 
                             print(colored(function_arguments, 'blue'))
                             break
-
-                    run_status = _ai_client.beta.threads.runs.submit_tool_outputs(
-                            thread_id=thread.id,
-                            run_id=run.id,
-                            tool_outputs=[
-                                {
-                                "tool_call_id": run_status.required_action.submit_tool_outputs.tool_calls[0].id,
-                                "output": "{success: true, message: crud operation determined, continue gathering the following information}"
-                                }
-                            ]
-                        )
                     
             elif run_status.status == 'failed':
+                ai_working = False
                 raise Exception("Run failed")
             
-            time.sleep(1)  # Wait before polling again
-    except:
-        
-        print('failed to add the things')
+            time.sleep(3)  # Wait before polling again
+    except Exception as e:
+        ai_working = False
+        print('failed to add the things '+str(e))
         return "unable to proccess your request please try again"
 
 def transcribe_audio(audio_path):
@@ -155,13 +163,13 @@ def transcribe_audio(audio_path):
         return response
     
 
-def text_to_audio(text:str):
+def text_to_audio(text:str, audio_id:str):
     response = _ai_client.audio.speech.create(
     model="tts-1",
-    voice="alloy",
+    voice='nova',
     input=text,
 )
+    file_name = f"response_{audio_id}.mp3"
+    response.write_to_file(f"response_{audio_id}.mp3")
 
-    response.write_to_file("response2.mp3")
-
-    return "response.mp3"
+    return file_name
