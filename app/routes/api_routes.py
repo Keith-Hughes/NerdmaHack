@@ -23,9 +23,9 @@ def process_text():
 
                 if message and message.get('type') == 'text':
                     print(message)
-                    response = determine_crud(message.get('text').get('body'))
-                    if response != "AI working":
-                        send_whatsapp_message(message, response)
+                    response = determine_crud(message.get('text').get('body'),message)
+                    if response != "AI working" or not "send_document":
+                        send_whatsapp_message(message, response) 
                     return jsonify({'status': 'success', 'message': 'Reply sent successfully'}), 200
 
                 elif message and message.get('type') == 'audio':
@@ -61,7 +61,7 @@ def process_text():
                             transcribed = transcribe_audio(audio_filename)
                             print('transcribed audio', transcribed)
                             if(transcribed['is_success']):
-                                response=determine_crud(transcribed['message'])
+                                response=determine_crud(transcribed['message'], message)
 
                                 if response != "AI working":
                                     audio_file=text_to_audio(response, audio_id)

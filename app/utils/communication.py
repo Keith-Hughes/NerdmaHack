@@ -73,6 +73,50 @@ def send_whatsapp_voice_message(origin_message, file_path):
     except:
         return send_whatsapp_message(origin_message, "unable to process")
 
+def send_whatsapp_document_message(origin_message, file_path):
+
+    PHONE_NUMBER_ID = current_app.config.get("PHONE_NUMBER_ID")
+    ACCESS_TOKEN = current_app.config.get("WHATSAPP_ACCESS_TOKEN")
+
+    headers={
+        'Authorization': f'Bearer {ACCESS_TOKEN}',
+    }
+
+    upload_url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/media"
+
+    files = {
+        'file': (file_path, open(file_path, 'rb'), 'application/pdf')
+    }
+
+    upload_json = {
+        'messaging_product': 'whatsapp',
+        'type': 'application/pdf'
+    }
+    try:
+        response= requests.post(upload_url, headers=headers, files=files, data=upload_json)
+        print("Document uploaded")
+
+        url= f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
+        
+        json={
+            'messaging_product': 'whatsapp',
+            'to': origin_message['from'],
+            'type': "document",
+            "document": {
+                "id": response.json()['id'],
+                "filename": file_path
+            },
+            'context': {
+                'message_id': origin_message['id']
+        }
+        }
+        print
+        response = requests.post(url, headers=headers, json=json)
+        print (response)
+        return response
+    except:
+        return send_whatsapp_message(origin_message, "unable to process")
+
 def send_email_message(subject, body, to_email):
     context = ssl.create_default_context()
     port = current_app.config.get('MAIL_PORT')
