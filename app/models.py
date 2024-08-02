@@ -12,7 +12,7 @@ class Client(db.Model):
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    dateCreated = db.Column(db.DateTime, default=datetime.utcnow)
+    dateCreated = db.Column(db.DateTime, default=datetime.now())
     projectName = db.Column(db.String(100), nullable=False)
     clientId = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     client = db.relationship('Client', back_populates='projects')
@@ -20,7 +20,7 @@ class Project(db.Model):
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     taskName = db.Column(db.String(100), nullable=False)
-    dateCreated = db.Column(db.DateTime, default=datetime.utcnow)
+    dateCreated = db.Column(db.DateTime, default=datetime.now())
     dueDate = db.Column(db.DateTime, nullable=False)
     projectId = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     project = db.relationship('Project', back_populates='tasks')
@@ -29,8 +29,9 @@ class Invoice(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     invoiceNumber = db.Column(db.String(50), unique=True, nullable=False)
     fileUrl = db.Column(db.String(200), nullable=False)
-    dateCreated = db.Column(db.DateTime, default=datetime.utcnow)
+    dateCreated = db.Column(db.DateTime, default=datetime.now())
     dueDate = db.Column(db.DateTime, nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
     projectId = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
     project = db.relationship('Project', back_populates='invoices')
 
