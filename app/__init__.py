@@ -2,6 +2,7 @@ from flask import Flask
 from config import config
 from dotenv import load_dotenv
 import os
+from .models import db
 
 #load environment variables
 load_dotenv()
@@ -16,11 +17,14 @@ def create_app(config_name=None):
 
     # Initialize other components like database, etc.
     # from .models import db
-    # db.init_app(app)
+    db.init_app(app)
 
     # Register routes blueprints
     from .routes import register_blueprints
     register_blueprints(app)
+
+    with app.app_context():
+        db.create_all()
 
 
     return app

@@ -37,7 +37,7 @@ class ReadTools(Enum):
         "type": "function",
         "function": {
             "name": "get_client_info",
-            "description": "Get client information for the user",
+            "description": "Get a clients information for the user",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -48,6 +48,22 @@ class ReadTools(Enum):
                 },
                 "required": ["contact_number"],
             },
+        }
+    }
+    GET_ALL_CLIENTS = {
+        "type": "function",
+        "function": {
+            "name": "get_all_clients",
+            "description": "retrieve all clients currently on the system if the user requests it",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "is_request_all": {
+                        "type": "boolean",
+                        "description": "Is the user requesting all clients or just one",
+                    }
+                }
+            }
         }
     }
     GET_SALES_REPORT = {
@@ -327,5 +343,6 @@ all_functions= [
     CreateTools.ADD_TO_INVENTORY.value,
     DeleteTools.DELETE_CLIENT.value,
     DeleteTools.DELETE_INVENTORY.value,
+    ReadTools.GET_ALL_CLIENTS.value,
 ]
 

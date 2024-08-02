@@ -7,6 +7,8 @@ from .ai_functions import *
 from .ai_roles import *
 from termcolor import colored
 from .communication import *
+from ..services import *
+
 
 _ai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
@@ -88,49 +90,74 @@ def determine_crud(message):
                             to_email = function_arguments['email_address']
                             body = function_arguments['message']
 
-                            outcome=send_email_message(subject, body, to_email)
-                        
+                            result=email_exists(to_email)
+                            if not result:
+                                outcome="{success: False, message: Cant send emails to people who are not clients}"
+                            else:
+                                outcome=send_email_message(subject, body, to_email)
+
                             send_operation_outcome(run.id, thread.id, tool_call_id, outcome)
                             print(colored("EMAIL OUTCOME: "+outcome, 'blue'))
                             break
 
                         case "GET_CLIENT_INFO":
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
 
                             print(colored(function_arguments, 'blue'))
                             break
 
                         case "GET_SALES_REPORT":
-
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
                             print(colored(function_arguments, 'blue'))
                             break
+
                         case "GET_INVENTORY_REPORT":
-
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
                             print(colored(function_arguments, 'blue'))
                             break
+
                         case "UPDATE_CLIENT_INFO":
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
 
                             print(colored(function_arguments, 'blue'))
                             break
+
                         case "UPDATE_INVENTORY":
-
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")                            
                             print(colored(function_arguments, 'blue'))
                             break
+
+                        case "GET_ALL_CLIENTS":
+
+                            response = get_all_clients()
+                            print(response)
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "{success: true, client_list: " +str(response)+"}" )
+                            break
+
                         case "ADD_CLIENT":
+                            first_name = function_arguments['first_name']
+                            last_name = function_arguments['last_name']
+                            email = function_arguments['email']
+                            contact_number = function_arguments['contact_number']
 
-                            print(colored(function_arguments, 'blue'))
-                            send_operation_outcome(run.id, thread.id, tool_call_id, "{success: true, message: client added}" )
+                            response=add_client(first_name, last_name, contact_number, email)
+                            
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "{success: true, message: " + str(response)+"}" )
                             break
-                        case "ADD_TO_INVENTORY":
 
+                        case "ADD_TO_INVENTORY":
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
                             print(colored(function_arguments, 'blue'))
                             break
 
                         case "DELETE_CLIENT":
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
 
                             print(colored(function_arguments, 'blue'))
                             break
 
                         case "DELETE_INVENTORY":
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
 
                             print(colored(function_arguments, 'blue'))
                             break
