@@ -3,12 +3,12 @@ function addClient(event) {
 
     event.preventDefault();
 
-    nameInput = document.getElementById("name").innerText;
-    surname = document.getElementById("surname");
-    cellNumber = document.getElementById("phone");
-    emails = document.getElementById("email");
+    nameInput = document.getElementById("name").value;
+    surname = document.getElementById("surname").value;
+    cellNumber = document.getElementById("phone").value;
+    emails = document.getElementById("email").value;
 
-    url = 'http://https://destined-ideal-sculpin.ngrok-free.app/add_client';
+    url = 'https://destined-ideal-sculpin.ngrok-free.app/add_client';
 
     data = {
         firstName: nameInput,

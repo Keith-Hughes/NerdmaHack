@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const url = 'http://destined-ideal-sculpin.ngrok-free.app/get_clients';
+    const url = 'https://destined-ideal-sculpin.ngrok-free.app/clients';
 
     fetch(url, {
         method: 'GET',
