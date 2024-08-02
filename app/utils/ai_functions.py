@@ -228,6 +228,31 @@ class CreateTools(Enum):
             },
         }
     }
+    CREATE_INVOICE = {
+        "type": "function",
+        "function": {
+            "name": "create_invoice",
+            "description": "create an invoice document",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "invoice_description": {
+                        "type": "string",
+                        "description": "the service or product that the user is invoicing",
+                    },
+                    "amount": {
+                        "type": "integer",
+                        "description": "the total amount of the invoice",
+                    },
+                    "project_name": {
+                        "type": "string",
+                        "description": "the name of the project for which this invoice is for",
+                    },
+                },
+                "required": ["invoice_description", "amount", "project_name"]
+            },
+        }
+    }
     ADD_TO_INVENTORY = {
         "type": "function",
         "function": {
@@ -332,6 +357,7 @@ OperationMap= {
     }
 
 all_functions= [
+    CreateTools.CREATE_INVOICE.value,
     CreateTools.SEND_EMAIL.value,
     ReadTools.DETERMINE_CRUD.value,
     ReadTools.GET_CLIENT_INFO.value,

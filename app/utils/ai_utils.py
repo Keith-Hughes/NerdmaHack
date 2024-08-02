@@ -8,6 +8,7 @@ from .ai_roles import *
 from termcolor import colored
 from .communication import *
 from ..services import *
+from .generatepdffrominvoice import *
 
 
 _ai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
@@ -105,7 +106,30 @@ def determine_crud(message):
 
                             print(colored(function_arguments, 'blue'))
                             break
+                        
+                        case "CREATE_INVOICE":
+                            project_name = function_arguments['project_name']
+                            amount = int(function_arguments['amount'])
+                            invoice_description = function_arguments['invoice_description']
 
+                            response=get_client_by_project_name(project_name)
+
+                            if response['error']:
+                                send_operation_outcome(run.id, thread.id, tool_call_id, json.dumps(response))
+                                break
+                            project_id = response['projectId']
+                            first_name = response['firstName']
+                            last_name = response['lastName']
+                            phone_number = response['phoneNumber']
+                            email = response['email']
+
+                            file=create_invoice_dict(project_id,first_name, last_name, email, phone_number, project_name, invoice_description, amount)
+
+                            send_operation_outcome(run.id, thread.id, tool_call_id, "invoice created successfully")
+
+
+                                                        
+                            break
                         case "GET_SALES_REPORT":
                             send_operation_outcome(run.id, thread.id, tool_call_id, "Developers still working on this function")
                             print(colored(function_arguments, 'blue'))
