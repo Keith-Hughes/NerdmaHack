@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Invoice</title>
+  <link rel="stylesheet" href="add_client.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="overlay">
+    <form>
+      <h1>Invoice Builder 📈💰📊</h1>
+      <p>Keep a record of an invoice by providing a few key details </p>
+      <div class="input-group">
+          <label for="invoice-nr">Invoice Number</label>
+          <div class="input-container">
+              <input type="text" id="invoice-nr" name="invoice-nr" placeholder="Invoice Number">
+          </div>
+      </div>
+      <div class="input-group">
+        <label for="file-url">File Url</label>
+        <div class="input-container">
+            <input type="text" id="file-url" name="file-url" placeholder="example.doc">
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="date">Date Created</label>
+        <div class="input-container">
+            <input type="date" id="date-created" name="date-created" placeholder="01/01/2000">
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="due-date">Due Date</label>
+        <div class="input-container">
+            <input type="date" id="due-date" name="due-date" placeholder="today">
+        </div>
+      </div>
+      <button type="submit">
+        <svg fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16px" height="16px" viewBox="0 0 45.402 45.402" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M41.267,18.557H26.832V4.134C26.832,1.851,24.99,0,22.707,0c-2.283,0-4.124,1.851-4.124,4.135v14.432H4.141 c-2.283,0-4.139,1.851-4.138,4.135c-0.001,1.141,0.46,2.187,1.207,2.934c0.748,0.749,1.78,1.222,2.92,1.222h14.453V41.27 c0,1.142,0.453,2.176,1.201,2.922c0.748,0.748,1.777,1.211,2.919,1.211c2.282,0,4.129-1.851,4.129-4.133V26.857h14.435 c2.283,0,4.134-1.867,4.133-4.15C45.399,20.425,43.548,18.557,41.267,18.557z"></path> </g> </g></svg>
+        Add Invoice
+      </button>
+    </form>
+</body>
+</html>
