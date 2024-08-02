@@ -37,7 +37,7 @@ class ReadTools(Enum):
         "type": "function",
         "function": {
             "name": "get_client_info",
-            "description": "Get client information for the user",
+            "description": "Get a clients information for the user",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -48,6 +48,22 @@ class ReadTools(Enum):
                 },
                 "required": ["contact_number"],
             },
+        }
+    }
+    GET_ALL_CLIENTS = {
+        "type": "function",
+        "function": {
+            "name": "get_all_clients",
+            "description": "retrieve all clients currently on the system if the user requests it",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "is_request_all": {
+                        "type": "boolean",
+                        "description": "Is the user requesting all clients or just one",
+                    }
+                }
+            }
         }
     }
     GET_SALES_REPORT = {
@@ -212,6 +228,31 @@ class CreateTools(Enum):
             },
         }
     }
+    CREATE_INVOICE = {
+        "type": "function",
+        "function": {
+            "name": "create_invoice",
+            "description": "create an invoice document",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "invoice_description": {
+                        "type": "string",
+                        "description": "the service or product that the user is invoicing",
+                    },
+                    "amount": {
+                        "type": "integer",
+                        "description": "the total amount of the invoice",
+                    },
+                    "project_name": {
+                        "type": "string",
+                        "description": "the name of the project for which this invoice is for",
+                    },
+                },
+                "required": ["invoice_description", "amount", "project_name"]
+            },
+        }
+    }
     ADD_TO_INVENTORY = {
         "type": "function",
         "function": {
@@ -316,6 +357,7 @@ OperationMap= {
     }
 
 all_functions= [
+    CreateTools.CREATE_INVOICE.value,
     CreateTools.SEND_EMAIL.value,
     ReadTools.DETERMINE_CRUD.value,
     ReadTools.GET_CLIENT_INFO.value,
@@ -327,5 +369,6 @@ all_functions= [
     CreateTools.ADD_TO_INVENTORY.value,
     DeleteTools.DELETE_CLIENT.value,
     DeleteTools.DELETE_INVENTORY.value,
+    ReadTools.GET_ALL_CLIENTS.value,
 ]
 

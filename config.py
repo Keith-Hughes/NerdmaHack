@@ -15,6 +15,7 @@ class Config:
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     PHONE_NUMBER_ID=os.getenv('PHONE_NUMBER_ID')
+    TAX_RATE = 15
 
 
 class DevelopmentConfig(Config):

@@ -21,8 +21,6 @@ def process_text():
 
             if data:
 
-                
-
                 if message and message.get('type') == 'text':
                     print(message)
                     response = determine_crud(message.get('text').get('body'))
@@ -39,8 +37,6 @@ def process_text():
                             'Authorization': f'Bearer {ACCESS_TOKEN}',
                         }
                     )
-
-                    print(audio_response)    
 
                     if (audio_response.status_code == 200):
                         audio_data = json.loads(audio_response.content)
