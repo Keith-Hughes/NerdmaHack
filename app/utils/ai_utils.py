@@ -41,7 +41,7 @@ def send_operation_outcome(run_id, thread_id, tool_call_id, outcome):
     time.sleep(3)  
 
 
-def determine_crud(message):
+def determine_crud(message, original_message):
     global ai_working
 
     try:
@@ -112,19 +112,21 @@ def determine_crud(message):
                             amount = int(function_arguments['amount'])
                             invoice_description = function_arguments['invoice_description']
 
-                            response=get_client_by_project_name(project_name)
+                            # response=get_client_by_project_name(project_name)
+                            # invoice
+                            # if response['error']:
+                            #     send_operation_outcome(run.id, thread.id, tool_call_id, json.dumps(response))
+                            #     break
+                            # project_id = response['projectId']
+                            # first_name = response['firstName']
+                            # last_name = response['lastName']
+                            # phone_number = response['phoneNumber']
+                            # email = response['email']
 
-                            if response['error']:
-                                send_operation_outcome(run.id, thread.id, tool_call_id, json.dumps(response))
-                                break
-                            project_id = response['projectId']
-                            first_name = response['firstName']
-                            last_name = response['lastName']
-                            phone_number = response['phoneNumber']
-                            email = response['email']
-
-                            file=create_invoice_dict(project_id,first_name, last_name, email, phone_number, project_name, invoice_description, amount)
-
+                            # invoice_dict=create_invoice_dict(project_id,first_name, last_name, email, phone_number, project_name, invoice_description, amount)
+                            file=generate_pdf(invoice)
+                            print('pdf created sending whatsapp...')
+                            send_whatsapp_document_message(original_message, file)
                             send_operation_outcome(run.id, thread.id, tool_call_id, "invoice created successfully")
 
 
